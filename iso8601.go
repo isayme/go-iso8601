@@ -17,6 +17,6 @@ func Format(t time.Time) string {
 		t.Hour(),
 		t.Minute(),
 		t.Second(),
-		t.UnixNano()/int64(time.Millisecond),
+		t.Nanosecond()/int(time.Millisecond),
 	)
 }

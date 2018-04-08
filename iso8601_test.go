@@ -18,31 +18,45 @@ func assert(t *testing.T, exp, got interface{}) {
 func TestISO8601(t *testing.T) {
 	t.Run("time.Unix(0, 0)", func(t *testing.T) {
 		s := Format(time.Unix(0, 0))
-		assert(t, s, "1970-01-01T08:00:00.000Z")
+		assert(t, s, "1970-01-01T00:00:00.000Z")
 	})
 
 	t.Run("time.Unix(0, 1000)", func(t *testing.T) {
 		s := Format(time.Unix(0, 1000))
-		assert(t, s, "1970-01-01T08:00:00.000Z")
+		assert(t, s, "1970-01-01T00:00:00.000Z")
 	})
 
 	t.Run("time.Unix(0, 100000)", func(t *testing.T) {
 		s := Format(time.Unix(0, 100000))
-		assert(t, s, "1970-01-01T08:00:00.000Z")
+		assert(t, s, "1970-01-01T00:00:00.000Z")
 	})
 
 	t.Run("time.Unix(0, 1000000)", func(t *testing.T) {
 		s := Format(time.Unix(0, 1000000))
-		assert(t, s, "1970-01-01T08:00:00.001Z")
+		assert(t, s, "1970-01-01T00:00:00.001Z")
 	})
 
 	t.Run("time.Unix(0, 10000000)", func(t *testing.T) {
 		s := Format(time.Unix(0, 10000000))
-		assert(t, s, "1970-01-01T08:00:00.010Z")
+		assert(t, s, "1970-01-01T00:00:00.010Z")
 	})
 
 	t.Run("time.Unix(0, 100000000)", func(t *testing.T) {
 		s := Format(time.Unix(0, 100000000))
-		assert(t, s, "1970-01-01T08:00:00.100Z")
+		assert(t, s, "1970-01-01T00:00:00.100Z")
+	})
+
+	t.Run("tz", func(t *testing.T) {
+		ts := time.Unix(0, 0)
+		loc, _ := time.LoadLocation("Asia/Shanghai")
+		ts = ts.In(loc)
+
+		s := Format(ts)
+		assert(t, s, "1970-01-01T00:00:00.000Z")
+
+		loc, _ = time.LoadLocation("America/New_York")
+		ts = ts.In(loc)
+		s = Format(ts)
+		assert(t, s, "1970-01-01T00:00:00.000Z")
 	})
 }

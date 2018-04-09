@@ -16,45 +16,59 @@ func assert(t *testing.T, exp, got interface{}) {
 }
 
 func TestISO8601(t *testing.T) {
+	t.Run("nil", func(t *testing.T) {
+		var ts *time.Time
+		s := Format(ts)
+		var strNil *string
+		assert(t, s, strNil)
+	})
+
 	t.Run("var t time.Time", func(t *testing.T) {
 		var ts time.Time
-		s := Format(ts)
-		assert(t, "0001-01-01T00:00:00.000Z", s)
+		s := Format(&ts)
+		assert(t, "0001-01-01T00:00:00.000Z", *s)
 	})
 
 	t.Run("time.Unix(0, 0)", func(t *testing.T) {
-		s := Format(time.Unix(0, 0))
-		assert(t, "1970-01-01T00:00:00.000Z", s)
+		ts := time.Unix(0, 0)
+		s := Format(&ts)
+		assert(t, "1970-01-01T00:00:00.000Z", *s)
 	})
 
 	t.Run("time.Unix(0, 1000)", func(t *testing.T) {
-		s := Format(time.Unix(0, 1000))
-		assert(t, "1970-01-01T00:00:00.000Z", s)
+		ts := time.Unix(0, 1000)
+		s := Format(&ts)
+		assert(t, "1970-01-01T00:00:00.000Z", *s)
 	})
 
 	t.Run("time.Unix(0, 100000)", func(t *testing.T) {
-		s := Format(time.Unix(0, 100000))
-		assert(t, "1970-01-01T00:00:00.000Z", s)
+		ts := time.Unix(0, 100000)
+		s := Format(&ts)
+		assert(t, "1970-01-01T00:00:00.000Z", *s)
 	})
 
 	t.Run("time.Unix(0, 1000000)", func(t *testing.T) {
-		s := Format(time.Unix(0, 1000000))
-		assert(t, "1970-01-01T00:00:00.001Z", s)
+		ts := time.Unix(0, 1000000)
+		s := Format(&ts)
+		assert(t, "1970-01-01T00:00:00.001Z", *s)
 	})
 
 	t.Run("time.Unix(0, 10000000)", func(t *testing.T) {
-		s := Format(time.Unix(0, 10000000))
-		assert(t, "1970-01-01T00:00:00.010Z", s)
+		ts := time.Unix(0, 10000000)
+		s := Format(&ts)
+		assert(t, "1970-01-01T00:00:00.010Z", *s)
 	})
 
 	t.Run("time.Unix(0, 100000000)", func(t *testing.T) {
-		s := Format(time.Unix(0, 100000000))
-		assert(t, "1970-01-01T00:00:00.100Z", s)
+		ts := time.Unix(0, 100000000)
+		s := Format(&ts)
+		assert(t, "1970-01-01T00:00:00.100Z", *s)
 	})
 
 	t.Run("time.Unix(0, 1523199549840ms)", func(t *testing.T) {
-		s := Format(time.Unix(0, 1523199549840*int64(time.Millisecond)))
-		assert(t, "2018-04-08T14:59:09.840Z", s)
+		ts := time.Unix(0, 1523199549840*int64(time.Millisecond))
+		s := Format(&ts)
+		assert(t, "2018-04-08T14:59:09.840Z", *s)
 	})
 
 	t.Run("tz", func(t *testing.T) {
@@ -62,12 +76,12 @@ func TestISO8601(t *testing.T) {
 		loc, _ := time.LoadLocation("Asia/Shanghai")
 		ts = ts.In(loc)
 
-		s := Format(ts)
-		assert(t, "1970-01-01T00:00:00.000Z", s)
+		s := Format(&ts)
+		assert(t, "1970-01-01T00:00:00.000Z", *s)
 
 		loc, _ = time.LoadLocation("America/New_York")
 		ts = ts.In(loc)
-		s = Format(ts)
-		assert(t, "1970-01-01T00:00:00.000Z", s)
+		s = Format(&ts)
+		assert(t, "1970-01-01T00:00:00.000Z", *s)
 	})
 }

@@ -16,6 +16,12 @@ func assert(t *testing.T, exp, got interface{}) {
 }
 
 func TestISO8601(t *testing.T) {
+	t.Run("var t time.Time", func(t *testing.T) {
+		var ts time.Time
+		s := Format(ts)
+		assert(t, "0001-01-01T00:00:00.000Z", s)
+	})
+
 	t.Run("time.Unix(0, 0)", func(t *testing.T) {
 		s := Format(time.Unix(0, 0))
 		assert(t, "1970-01-01T00:00:00.000Z", s)

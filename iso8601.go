@@ -5,15 +5,27 @@ import (
 	"time"
 )
 
-// Format format a time to ISO8601 layout
-func Format(t *time.Time) *string {
-	if t == nil {
-		return nil
-	}
+// Time time with iso8601 json format
+type Time time.Time
 
+// MarshalJSON custom MarshalJSON
+func (ts Time) MarshalJSON() ([]byte, error) {
+	t := (time.Time)(ts)
+	s := Format(t)
+
+	b := make([]byte, 0, 26)
+	b = append(b, '"')
+	b = append(b, s...)
+	b = append(b, '"')
+
+	return b, nil
+}
+
+// Format format a time to ISO8601 layout
+func Format(t time.Time) string {
 	utc := t.UTC()
 
-	s := fmt.Sprintf(
+	return fmt.Sprintf(
 		"%04d-%02d-%02dT%02d:%02d:%02d.%03dZ",
 		utc.Year(),
 		utc.Month(),
@@ -23,6 +35,4 @@ func Format(t *time.Time) *string {
 		utc.Second(),
 		utc.Nanosecond()/int(time.Millisecond),
 	)
-
-	return &s
 }
